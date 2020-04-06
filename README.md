@@ -4,4 +4,7 @@
 * add record  
 
 
-    url:     
+    url:  /record
+    method: post
+    contentType: 'application/json'
+       
