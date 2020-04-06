@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Shipment Records</title>
+  <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+  <link href="{{ url_for('static', filename='css/index.css') }}" rel="stylesheet">
+</head>
+<body>
+{#top-bar#}
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+  <a class="navbar-brand" href="#">Shipment Records</a>
+</nav>
+
+<div id="body">
+  {# search #}
+  <div id="search">
+    <h5> Filter </h5>
+      <label for="user-filter">Username</label>
+      <input type="text" id="user-filter" name="user">
+
+      <label for="product-filter">Product</label>
+      <input type="text" id="product-filter" name="product">
+
+      <button class="btn btn-primary" id="search-btn"> Search</button>
+  </div>
+
+  {# add record #}
+  <div class="form-group">
+    <h5> Add Record </h5>
+    <form id="add-form">
+      <label for="user-input">Username</label>
+      <input type="text" name="user" id="user-input" required>
+
+      <label for="product-input">Product Name</label>
+      <input type="text" name="product" id="product-input" required>
+
+      <label for="age-input">Age</label>
+      <input type="number" name="age" id="age-input">
+
+      <label for="latitude-input">Latitude</label>
+      <input type="number" name="latitude" id="latitude-input" step="0.001">
+
+      <label for="longitude-input">Longitude</label>
+      <input type="number" name="longitude" id="longitude-input" step="0.001">
+
+      <label for="hierarchy-input">Hierarchy</label>
+      <input type="text" name="hierarchy" id="hierarchy-input">
+      <button class="btn btn-primary" id="add-btn"> Add</button>
+    </form>
+  </div>
+
+  {# delete records #}
+  <div id="delete">
+    <button class="btn btn-danger" id="delete-btn">Delete Selected Records</button>
+  </div>
+
+  {#record table#}
+  <div id="table-section">
+    <table class="table table-striped table-dark" id="record-table">
+      <thead>
+      <tr>
+        <th scope="col"></th>
+        <th scope="col">User</th>
+        <th scope="col">Age</th>
+        <th scope="col">Product</th>
+        <th scope="col">Latitude</th>
+        <th scope="col">Longitude</th>
+        <th scope="col">Hierarchy</th>
+        <th scope="col">Operation</th>
+      </tr>
+      </thead>
+      <tbody>
+      {% for record in records %}
+        <tr class='table-row'>
+          <td><input type="checkbox" id="record-{{ record.id }}"></td>
+          <td>{{ record.user }}</td>
+          <td>{{ record.age }}</td>
+          <td>{{ record.product }}</td>
+          <td>{{ record.latitude }}</td>
+          <td>{{ record.longitude }}</td>
+          <td>{{ record.hierarchy }}</td>
+          <td>
+            <button onclick="deleteRecord('{{ record.id }}')" class="btn btn-danger">Delete</button>
+          </td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+<script src="{{ url_for('static', filename='js/bootstrap.bundle.js') }}"></script>
+<script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+<script type="text/javascript">
+
+  // add record
+  $("#add-btn").click(function () {
+    let data = {
+      user: $("#user-input").val(),
+      product: $("#product-input").val(),
+      age: $("#age-input").val(),
+      latitude: $("#latitude-input").val(),
+      longitude: $("#longitude-input").val(),
+      hierarchy: $("#hierarchy-input").val(),
+    };
+
+    $.ajax({
+      type: "POST",
+      url: "{{ url_for('insert_record') }}",
+      data: JSON.stringify(data),
+      dataType: "json",
+      contentType: "application/json",
+      success: function (result) {
+        if (result.status === "success") {
+          location.reload();
+        }
+      }
+    })
+  });
+
+  $(document).ready(function () {
+    // search
+    $("#search-btn").click(function () {
+      let data = {
+        user: $('#user-filter').val(),
+        product: $('#product-filter').val()
+      };
+
+      $.ajax({
+        url: "{{ url_for('search') }}",
+        type: 'GET',
+        data: data,
+        success: function (result) {
+          console.log(result);
+          if (result.status === "success") {
+            refreshTable(result.records);
+          }
+        }
+      })
+    });
+  });
+
+
+  // refresh table
+  function refreshTable(records) {
+    let content = '';
+    for (let i = 0; i < records.length; i++) {
+      let id = records[i].id;
+      content += '<tr class="table-row">';
+      content += '<td><input type="checkbox" id="record-' + id + '"></td>';
+      content += '<td>' + records[i].user + '</td>';
+      content += '<td>' + records[i].age + '</td>';
+      content += '<td>' + records[i].product + '</td>';
+      content += '<td>' + records[i].latitude + '</td>';
+      content += '<td>' + records[i].longitude + '</td>';
+      content += '<td>' + records[i].hierarchy + '</td>';
+      content += '<td><button onclick="deleteRecord(\'' + id + '\')" class="btn btn-danger">Delete</button></td>';
+      content += '</tr>'
+    }
+
+    $('#record-table tbody').html(content);
+  }
+
+  // delete selected records
+  $('#delete-btn').click(function () {
+    // find all selected records
+    let selectedList = [];
+    $('#record-table td input[type=checkbox]').each(function () {
+      if (this.checked) {
+        let id = this.id.split('-')[1];
+        selectedList.push(id);
+      }
+    });
+
+    let data = {"records": selectedList};
+    // delete multiple records
+    $.ajax({
+      type: "DELETE",
+      url: "{{ url_for('delete_multiple_records') }}",
+      data: JSON.stringify(data),
+      contentType: "application/json",
+      dataType: "json",
+      success: function (result) {
+        if (result.status === "success") {
+          location.reload();
+        }
+      }
+    })
+  });
+
+  // delete a record
+  function deleteRecord(id) {
+    $.ajax({
+      type: "DELETE",
+      url: "{{ url_for('delete_record') }}",
+      data: JSON.stringify({"id": id}),
+      contentType: "application/json",
+      dataType: "json",
+      success: function (result) {
+        if (result.status === "success") {
+          location.reload();
+        }
+      }
+    })
+  }
+</script>
+</body>
+</html>
