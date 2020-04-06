@@ -4,7 +4,7 @@
 
 * [github](https://github.com/mchozhang/Shipment-Imitation)
 
-* [mongodb mlab](https://www.mlab.com/databases/heroku_4jww1vvv)
+* [mongodb mlab](https://www.mlab.com/databases/heroku_4jww1vvv)  
 account: heroku_4jww1vvv  
 password: admin123
 
@@ -12,7 +12,7 @@ password: admin123
 ## APIs design
 * add record  
 
-
+  ```
     url: shipment-imitation.herokuapp.com/record
     method: post
     contentType: "application/json"
@@ -25,7 +25,7 @@ password: admin123
         "latitude": <latitude>
         "hierarchy": <hierarchy>, #  hierarchy string should sparated by ","
     }
-    
+
     response:
     // if succeed
     {
@@ -39,13 +39,13 @@ password: admin123
         }
         "status": "success"
     }
-    
+
     // if fail
     {
         "status": "failed",
         "err_msg": <error message>,
     }
-    
+
     examples:
     // add new record, body json data
     {
@@ -56,11 +56,13 @@ password: admin123
         "latitude": <latitude>
         "hierarchy""": "cat, dog, lion",
     }
-    
-    
+    ```
+
+​    
 * search record  
 you can search records by using user or product parameters in url
 
+```
     url:  /record
     param: {
         user: <user>,
@@ -82,26 +84,27 @@ you can search records by using user or product parameters in url
         }],
         "status": "success"
     }
-    
+
     // if fail
     {
         "status": "failed",
         "err_msg": <error message>,
     }
-    
+
     examples:
     // search all records
     https://shipment-imitation.herokuapp.com/record
-    
+
     // search by user
     https://shipment-imitation.herokuapp.com/record?user=wenhao
-    
+
     // search by product and user
     https://shipment-imitation.herokuapp.com/record?user=wenhao&product=pen
-    
+```
+
 * delete one record  
 
-
+```
     url: shipment-imitation.herokuapp.com//record
     method: delete
     dataType: 'json'
@@ -110,28 +113,29 @@ you can search records by using user or product parameters in url
     {
         "id": <id>
     }
-    
+
     response:
     // if succeed
     {
         "status": "success"
     }
-    
+
     // if fail
     {
         "status": "failed",
         "err_msg": <error message>,
     }
-    
+
     examples:
     // delete one record by id
     {
         "id": "5e8a7a879810639d7904ad28"
     }
-    
+```
+
 * delete multiple records
 
-
+```
     url: shipment-imitation.herokuapp.com/delete-records
     method: delete
     dataType: 'json'
@@ -140,21 +144,22 @@ you can search records by using user or product parameters in url
     {
         "records": [ <id-1>, <id-2>, ...]
     }
-    
+
     response:
     // if succeed
     {
         "status": "success"
     }
-    
+
     // if fail
     {
         "status": "failed",
         "err_msg": <error message>,
     }
-    
+
     examples:
     // delete multiple records by ids
     {
         "records": ["5e8a7a879810639d7904ad28", "5e8a7a939810639d7904ad29"]
     }
+```
