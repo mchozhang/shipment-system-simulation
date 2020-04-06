@@ -55,7 +55,6 @@ def search():
         "status": "success",
     }
     try:
-        r = request
         # parse arguments from url
         user = request.args.get('user', "").strip()
         product = request.args.get('product', "").strip()

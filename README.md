@@ -62,8 +62,8 @@ password: admin123
 * search record  
 you can search records by using user or product parameters in url
 
-```
-    url:  /record
+    ```
+    url:  shipment-imitation.herokuapp.com/record
     param: {
         user: <user>,
         product: <product>,
@@ -100,12 +100,12 @@ you can search records by using user or product parameters in url
 
     // search by product and user
     https://shipment-imitation.herokuapp.com/record?user=wenhao&product=pen
-```
+    ```
 
 * delete one record  
 
-```
-    url: shipment-imitation.herokuapp.com//record
+    ```
+    url: shipment-imitation.herokuapp.com/record
     method: delete
     dataType: 'json'
     contentType: 'application/json'
@@ -131,11 +131,11 @@ you can search records by using user or product parameters in url
     {
         "id": "5e8a7a879810639d7904ad28"
     }
-```
+    ```
 
 * delete multiple records
 
-```
+    ```
     url: shipment-imitation.herokuapp.com/delete-records
     method: delete
     dataType: 'json'
@@ -162,4 +162,4 @@ you can search records by using user or product parameters in url
     {
         "records": ["5e8a7a879810639d7904ad28", "5e8a7a939810639d7904ad29"]
     }
-```
+    ```
