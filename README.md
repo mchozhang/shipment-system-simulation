@@ -10,6 +10,9 @@
     dataType: 'json'
     body: {
         'user': <username>,
-        'product': <product-name>
+        'product': <product-name>,
+        'age': <age>,
+        'longitude': <longitude>,
+        '
     }
        
