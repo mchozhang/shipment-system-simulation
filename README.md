@@ -1,12 +1,7 @@
 # Shipment-Imitation
-## links
-* [demo](https://shipment-imitation.herokuapp.com/)  
+RESTful API design and implementation demonstration in `Flask`. Each API retrieves data from `MongoDB`.
 
-* [github](https://github.com/mchozhang/Shipment-Imitation)
-
-* [mongodb mlab](https://www.mlab.com/databases/heroku_4jww1vvv)  
-account: heroku_4jww1vvv  
-password: admin123
+[demo](https://shipment-imitation.herokuapp.com/)
 
 
 ## APIs design
@@ -54,7 +49,7 @@ password: admin123
         "age": 20,
         "longitude": 114.5,
         "latitude": <latitude>
-        "hierarchy""": "cat, dog, lion",
+        "hierarchy": "cat, dog, lion",
     }
     ```
 
